@@ -1,0 +1,9 @@
+# Por padrão, não incluir arquivos locais, extrações ou resultados de testes.
+/*
+!/README.md
+!/.gitignore
+!/windows/
+/windows/*
+!/windows/*.cs
+!/windows/G5Link.csproj
+!/windows/controller-white.jpg
