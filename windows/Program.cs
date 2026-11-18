@@ -8,6 +8,15 @@ namespace G5Link;
 
 internal static class Program
 {
+    internal static string DataDirectory
+    {
+        get
+        {
+            string path=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"G5Link");
+            Directory.CreateDirectory(path);
+            return path;
+        }
+    }
     static bool controls;
     static bool testControls;
     static bool actuators,testActuators;
@@ -80,7 +89,7 @@ internal static class Program
                 {
                     var item=await client.ReadMacro(slot);slots.Add(item);Console.WriteLine($"M{slot+1}: {Convert.ToHexString(item.Data)}");
                 }
-                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"macros-backup.json"),System.Text.Json.JsonSerializer.Serialize(new{catalog,slots}));
+                File.WriteAllText(Path.Combine(DataDirectory,"macros-backup.json"),System.Text.Json.JsonSerializer.Serialize(new{catalog,slots}));
                 if(testMacros)
                 {
                     var empty=slots.FirstOrDefault(s=>s.Data.Length==0)??throw new IOException("Não existe slot vazio para o teste.");
@@ -106,7 +115,7 @@ internal static class Program
             {
                 await client.Connect(seen.Keys.Single());var original=await client.ReadTurbo();
                 Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(original));
-                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"turbo-backup.json"),System.Text.Json.JsonSerializer.Serialize(original));
+                File.WriteAllText(Path.Combine(DataDirectory,"turbo-backup.json"),System.Text.Json.JsonSerializer.Serialize(original));
                 if(testTurbo)
                 {
                     var changed=original.Data.ToArray();changed[0]=(byte)(changed[0]==100?50:100);
@@ -136,7 +145,7 @@ internal static class Program
             try
             {
                 await client.Connect(seen.Keys.Single());var original=await client.ReadActuators();
-                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"actuators-backup.json"),System.Text.Json.JsonSerializer.Serialize(original));
+                File.WriteAllText(Path.Combine(DataDirectory,"actuators-backup.json"),System.Text.Json.JsonSerializer.Serialize(original));
                 Console.WriteLine("Gatilhos: "+Convert.ToHexString(original.Triggers));Console.WriteLine("Motores: "+Convert.ToHexString(original.Motors));
                 if(testActuators)
                 {
@@ -160,7 +169,7 @@ internal static class Program
                 await client.Connect(seen.Keys.Single());
                 var profile=await client.ReadControls();
                 Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(profile));
-                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"controls-backup.json"),System.Text.Json.JsonSerializer.Serialize(profile));
+                File.WriteAllText(Path.Combine(DataDirectory,"controls-backup.json"),System.Text.Json.JsonSerializer.Serialize(profile));
                 if(testControls)
                 {
                     var mapping=profile.Mapping.ToArray();int a=Array.IndexOf(profile.SupportedKeys,(byte)1), b=Array.IndexOf(profile.SupportedKeys,(byte)2);
@@ -199,7 +208,7 @@ internal static class Program
                 await client.Connect(seen.Keys.Single());
                 var data = await client.ReadLighting();
                 Console.WriteLine("Iluminação: " + Convert.ToHexString(data));
-                File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"lighting-backup.hex"),Convert.ToHexString(data));
+                File.WriteAllText(Path.Combine(DataDirectory,"lighting-backup.hex"),Convert.ToHexString(data));
                 if (test)
                 {
                     byte[] changed = data.ToArray(); changed[5] = (byte)(data[5] == 0 ? 1 : data[5]-1);
@@ -227,6 +236,7 @@ internal sealed record Device(ulong Address, string Name)
 
 internal sealed partial class MainWindow : Form
 {
+    static string DataDirectory => Program.DataDirectory;
     readonly ComboBox devices = new() { Width = 430, DropDownStyle = ComboBoxStyle.DropDownList };
     readonly Button scan = new() { Text = "Buscar controle", AutoSize = true };
     readonly Button connect = new() { Text = "Conectar", AutoSize = true };
@@ -297,7 +307,7 @@ internal sealed partial class MainWindow : Form
     {
         var line = $"[{DateTime.Now:HH:mm:ss}] {text}";
         log.AppendText(line + Environment.NewLine);
-        try { File.AppendAllText(Path.Combine(AppContext.BaseDirectory, "g5link.log"), line + Environment.NewLine); }
+        try { File.AppendAllText(Path.Combine(DataDirectory, "g5link.log"), line + Environment.NewLine); }
         catch (IOException) { }
         catch (UnauthorizedAccessException) { }
     }

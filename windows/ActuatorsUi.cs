@@ -71,7 +71,7 @@ internal sealed partial class MainWindow
         if(originalActuators==null)
         {
             originalActuators=new(actuatorProfile.Triggers.ToArray(),actuatorProfile.Motors.ToArray());
-            var path=Path.Combine(AppContext.BaseDirectory,$"actuators-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
+            var path=Path.Combine(DataDirectory,$"actuators-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
             File.WriteAllText(path,JsonSerializer.Serialize(originalActuators));Log("Backup: "+Path.GetFileName(path));
         }
         PopulateActuators();Log("Gatilhos e vibração lidos.");

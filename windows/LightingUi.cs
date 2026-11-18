@@ -149,7 +149,7 @@ internal sealed partial class MainWindow
         {
             originalLighting = data.ToArray();
             string name = $"lighting-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.hex";
-            File.WriteAllText(Path.Combine(AppContext.BaseDirectory,name),Convert.ToHexString(data));
+            File.WriteAllText(Path.Combine(DataDirectory,name),Convert.ToHexString(data));
             Log("Backup da iluminação original: " + name);
         }
         zone.Items.Clear(); for (int i=0;i<data.Length/6;i++) zone.Items.Add("Zona " + (i+1));

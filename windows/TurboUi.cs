@@ -53,7 +53,7 @@ internal sealed partial class MainWindow
         if(originalTurbo==null)
         {
             originalTurbo=new(turboProfile.Keys.ToArray(),turboProfile.AutoKeys.ToArray(),turboProfile.Data.ToArray());
-            var path=Path.Combine(AppContext.BaseDirectory,$"turbo-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
+            var path=Path.Combine(DataDirectory,$"turbo-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
             File.WriteAllText(path,JsonSerializer.Serialize(originalTurbo));Log("Backup: "+Path.GetFileName(path));
         }
         PopulateTurbo();Log($"Turbo lido: {turboProfile.Keys.Length} botões; automático em {turboProfile.AutoKeys.Length}.");

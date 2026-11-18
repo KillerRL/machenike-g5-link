@@ -85,7 +85,7 @@ internal sealed partial class MainWindow
         if(originalProfile==null)
         {
             originalProfile=CloneProfile(profile);
-            var path=Path.Combine(AppContext.BaseDirectory,$"controls-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
+            var path=Path.Combine(DataDirectory,$"controls-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json");
             File.WriteAllText(path,JsonSerializer.Serialize(originalProfile));Log("Backup de botões e analógicos: "+Path.GetFileName(path));
         }
         PopulateControls();Log($"Configuração lida: {profile.SupportedKeys.Length} botões, dois analógicos.");

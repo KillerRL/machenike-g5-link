@@ -7,3 +7,6 @@
 !/windows/*.cs
 !/windows/G5Link.csproj
 !/windows/controller-white.jpg
+!/installer/
+/installer/*
+!/installer/G5Link.iss

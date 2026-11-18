@@ -38,7 +38,7 @@ internal sealed partial class MainWindow
         for(int slot=0;slot<8;slot++)if((catalog.SlotMask&(1<<slot))!=0)slots.Add(await client.ReadMacro(slot));
         var backup=new MacroBackup(catalog,slots.ToArray());
         string file=$"macros-backup-{DateTime.Now:yyyyMMdd-HHmmss-fff}.json";
-        File.WriteAllText(Path.Combine(AppContext.BaseDirectory,file),JsonSerializer.Serialize(backup,new JsonSerializerOptions{WriteIndented=true}));
+        File.WriteAllText(Path.Combine(DataDirectory,file),JsonSerializer.Serialize(backup,new JsonSerializerOptions{WriteIndented=true}));
         macroBackup=backup;macroSessionOriginal??=backup;FillMacroSlots();
         Log($"Macros lidas sem alteração: {slots.Count} slots. Backup: {file}");
     }
