@@ -5,9 +5,9 @@ Aplicativo independente para Windows que configura por Bluetooth LE o **Machenik
 ## O que faz
 
 - Procura o controle ao iniciar, conecta automaticamente quando encontra apenas um e lê as configurações.
-- Ajusta iluminação RGB, brilho e respiração; remapeamento; zonas mortas, curvas e inversão dos analógicos; gatilhos, vibração e turbo.
+- Ajusta iluminação RGB, brilho e respiração; remapeamento; zonas mortas, curvas e inversão dos analógicos; gatilhos, vibração e turbo. A paleta aplica cores ao clicar; a respiração e as barras de brilho e velocidade também aplicam automaticamente.
 - Lê e preserva macros; permite editar slots vazios ou em formato digital reconhecido.
-- Cria backups locais e permite importar backups compatíveis de iluminação, botões, analógicos, gatilhos, vibração e turbo. Alterações são enviadas apenas ao clicar em **Aplicar**; a gravação é conferida por releitura.
+- Cria backups locais e permite importar backups compatíveis de iluminação, botões, analógicos, gatilhos, vibração e turbo. A gravação é conferida por releitura. Cores rápidas, respiração, brilho e velocidade são aplicados automaticamente; outras alterações exigem **Aplicar**.
 - Exibe teste ao vivo de comandos recebidos pelo Windows e uma vista superior esquemática de LB, LT, RB e RT.
 
 ## Requisitos e execução
@@ -21,7 +21,7 @@ dotnet publish windows/G5Link.csproj -c Release -r win-x64 --self-contained true
 
 A publicação acima inclui o runtime para Windows x64. Mantenha todos os arquivos da pasta `dist` juntos e use uma pasta com permissão de escrita para os backups e o registro local. Não existe instalador nem release pronta neste repositório.
 
-Ligue o controle no modo Bluetooth utilizado pelo KeyLinker. O G5 Link busca por 15 segundos; se encontrar mais de um, selecione o controle e clique em **Conectar**. Se uma leitura falhar, o status indica leitura parcial; reconecte para tentar novamente. Para alterar uma configuração, revise os valores na aba correspondente e clique em **Aplicar**. **Restaurar original** utiliza os valores lidos na conexão atual, conforme a área.
+Ligue o controle no modo Bluetooth utilizado pelo KeyLinker. O G5 Link busca por 15 segundos; se encontrar mais de um, selecione o controle e clique em **Conectar**. Se uma leitura falhar, o status indica leitura parcial; reconecte para tentar novamente. Para alterar uma configuração, revise os valores na aba correspondente. Na iluminação, cores rápidas e respiração são enviadas ao selecionar; brilho e velocidade são enviados após uma breve pausa no ajuste. Outros campos exigem **Aplicar**. **Restaurar original** utiliza os valores lidos na conexão atual, conforme a área.
 
 ## Estado e limitações
 
@@ -31,7 +31,7 @@ Testado com um G5Pro Max via Bluetooth: descoberta, leitura e testes de gravaç�
 - Não foi identificado comando para mudar as cores dos LEDs centrais ou do botão power.
 - Power/FN e botões traseiros M1/M2 não foram identificados como entradas físicas no perfil Windows testado. O teste ao vivo mostra comandos reportados pelo Windows, possivelmente após remapeamento; com mais de um gamepad, a visualização é pausada. Um único gamepad detectado não garante identificação física exclusiva.
 - Macros de formato desconhecido são preservadas e bloqueadas para edição. Movimentos analógicos em macros e importação de backups de macros não estão implementados.
-- A imagem e as prévias de iluminação são ilustrativas. Alguns perfis e modelos podem se comportar de forma diferente.
+- A imagem do controle e a vista superior são ilustrativas. Alguns perfis e modelos podem se comportar de forma diferente.
 
 ## Privacidade e backups
 

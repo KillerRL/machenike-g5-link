@@ -25,6 +25,11 @@ internal sealed partial class MainWindow
             {
                 button.FlatStyle=FlatStyle.Flat;button.FlatAppearance.BorderColor=Color.FromArgb(198,210,229);
                 button.BackColor=Color.White;button.ForeColor=Ink;button.Padding=new Padding(5,2,5,2);
+                if(button.Tag is Color preset)
+                {
+                    button.BackColor=preset;button.ForeColor=(preset.R*.299+preset.G*.587+preset.B*.114)<145?Color.White:Color.Black;
+                    button.FlatAppearance.BorderColor=Color.FromArgb(145,155,170);
+                }
                 if(button.Text.StartsWith("Aplicar",StringComparison.Ordinal))
                 {
                     void UpdateButton() {button.BackColor=button.Enabled?Accent:Color.FromArgb(231,237,247);button.ForeColor=button.Enabled?Color.White:Color.FromArgb(130,143,161);button.FlatAppearance.BorderColor=button.Enabled?Accent:Color.FromArgb(210,219,231);}
@@ -43,26 +48,6 @@ internal sealed partial class MainWindow
         }
     }
 
-    void DrawLightingPreview(Graphics g)
-    {
-        g.SmoothingMode=SmoothingMode.AntiAlias;g.Clear(Surface);
-        using var title=new Font("Segoe UI",12,FontStyle.Bold);
-        using var small=new Font("Segoe UI",9);
-        using var dark=new SolidBrush(Ink); using var muted=new SolidBrush(Color.FromArgb(94,110,134));
-        g.DrawString("Prévia da iluminação",title,dark,0,0);
-        g.DrawString("Representação ilustrativa • a cor é enviada somente ao aplicar",small,muted,0,30);
-        Color c=Color.FromArgb((int)(red.Value*brightness.Value/255),(int)(green.Value*brightness.Value/255),(int)(blue.Value*brightness.Value/255));
-        if(controllerImage!=null)
-        {
-            var dest=new Rectangle(60,58,400,180);
-            g.DrawImage(controllerImage,dest,new Rectangle(100,260,820,370),GraphicsUnit.Pixel);
-            using var light=new Pen(Color.FromArgb(150,c),4);
-            g.DrawEllipse(light,132,100,54,49);g.DrawEllipse(light,275,155,54,49);
-        }
-        g.DrawString($"RGB  {(int)red.Value}  /  {(int)green.Value}  /  {(int)blue.Value}",small,dark,495,104);
-        g.DrawString($"Brilho  {(int)brightness.Value} / 255",small,muted,495,130);
-        g.DrawString(breath.Checked?"Efeito  Respiração":"Efeito  Cor fixa",small,muted,495,155);
-    }
     void DrawTriggerPreview(Graphics g,int t)
     {
         g.SmoothingMode=SmoothingMode.AntiAlias;g.Clear(Surface);

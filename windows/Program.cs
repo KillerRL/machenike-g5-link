@@ -283,7 +283,7 @@ internal sealed partial class MainWindow : Form
             });
         };
         watcher.Stopped += (_, e) => OnUi(() => Log($"Scanner: {e.Error}"));
-        FormClosed += (_, _) => { closing = true; scanTimer.Dispose(); liveTimer.Dispose(); watcher.Stop(); Disconnect(); };
+        FormClosed += (_, _) => { closing = true; scanTimer.Dispose(); liveTimer.Dispose(); lightingSliderTimer.Stop(); watcher.Stop(); Disconnect(); lightingSliderTimer.Dispose(); };
         Shown += (_, _) => StartScan(automatic:true);
         Log("Protótipo independente. Busca G5Pro/G5Pro Max e consulta identificação.\r\nFeche o KeyLinker no celular se o controle não aparecer. Iluminação disponível após leitura. Aplicar envia a configuração ao controle.");
     }
@@ -314,6 +314,7 @@ internal sealed partial class MainWindow : Form
     void StopScan() { scanTimer.Stop(); watcher.Stop(); scan.Enabled = !busy; }
     void Disconnect()
     {
+        lightingSliderTimer.Stop();
         connectionStatus.Text="● Desconectado";connectionStatus.ForeColor=Color.Firebrick;
         client?.Dispose(); client = null; currentLighting = originalLighting = null;
         profile=originalProfile=null; keyGrid.Rows.Clear();
